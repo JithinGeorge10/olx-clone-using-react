@@ -1,0 +1,49 @@
+.bannerParentDiv {
+    padding-top: 4em;
+}
+
+.bannerParentDiv .bannerChildDiv {}
+
+.bannerParentDiv .bannerChildDiv .menuBar {
+    display: flex;
+    padding: 10px 16px 10px 16px;
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar span {
+    padding-left: 100px;
+
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar .categoryMenu span {
+    margin-right: 16px;
+    font-weight: bolder;
+    
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar .otherQuickOptions {
+    margin-left: 80px;
+}
+
+.bannerParentDiv .bannerChildDiv .menuBar .otherQuickOptions span {
+    padding: 10px;
+}
+.bannerChildDiv .banner {
+    position: relative;
+    width: 100vw;
+}
+
+.bannerChildDiv .banner img {
+    margin-left: 200px;
+    width: 70vw;
+    height:400px;
+}
+
+@media only screen and (max-width: 700px) {
+    .otherQuickOptions {
+        display: none;
+    }
+
+    .bannerChildDiv .banner {
+        position: relative;
+    }
+}
