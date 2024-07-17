@@ -1,12 +1,34 @@
-import React from 'react';
-
+import React, { useContext, useEffect, useState } from 'react'
 import './Header.css';
 import OlxLogo from '../../assets/OlxLogo';
 import Search from '../../assets/Search';
 import Arrow from '../../assets/Arrow';
 import SellButton from '../../assets/SellButton';
 import SellButtonPlus from '../../assets/SellButtonPlus';
+import { AuthContext } from '../authContext';
+import { getUserData } from '../../utils/firestore';
 function Header() {
+  const { user } = useContext(AuthContext)
+  console.log(user)
+  const [userName, setUser] = useState()
+  useEffect(() => {
+
+    (async function () {
+      try {
+        const userData = await getUserData(user.uid)
+        console.log(userData)
+        setUser(userData.username)
+      } catch (error) {
+        alert(error.message)
+      }
+    })()
+
+  }, [])
+
+
+  const signOut = async () => {
+    await userSignOut()
+  }
   return (
     <div className="headerParentDiv">
       <div className="headerChildDiv">
@@ -34,7 +56,8 @@ function Header() {
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
-          <span>Login</span>
+          <span>Hi, {userName}</span>
+
           <hr />
         </div>
 
