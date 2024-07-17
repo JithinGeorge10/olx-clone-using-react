@@ -1,22 +1,20 @@
-import { useEffect, useState,createContext } from 'react';
-import {  Route, Routes } from 'react-router-dom'
+import { useContext } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom'
 import Home from './Pages/Home'
 import Signup from './Components/Signup/Signup'
 import Login from './Components/Login/Login'
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { AuthContext } from './Components/authContext';
 
 function App() {
-  const UserContext = createContext()
+  const user = useContext(AuthContext)
+  console.log({user})
   return (
     <>
-        {/* <UserContext.Provider value={user}> */}
-        <Routes>
-          <Route path='/' element={<Home/> } />
-          <Route path='/signup' element={ <Signup/>} />
-          <Route path='/login' element={<Login/>} />
-        </Routes>
-        {/* </UserContext.Provider> */}
-
+      <Routes>
+        <Route path='/' element={user ? <Home /> : <Navigate to='/login' />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={!user ? <Login /> : <Navigate to='/' />} />
+      </Routes>
     </>
   )
 }

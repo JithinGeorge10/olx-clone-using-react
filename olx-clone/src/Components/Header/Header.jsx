@@ -6,28 +6,29 @@ import Arrow from '../../assets/Arrow';
 import SellButton from '../../assets/SellButton';
 import SellButtonPlus from '../../assets/SellButtonPlus';
 import { AuthContext } from '../authContext';
-import { getUserData } from '../../utils/firestore';
+import { getUserData, userSignOut } from '../../utils/firestore';
+import { useNavigate } from 'react-router-dom';
 function Header() {
-  const { user } = useContext(AuthContext)
-  console.log(user)
+  const user = useContext(AuthContext)
   const [userName, setUser] = useState()
+  const navigate = useNavigate()
   useEffect(() => {
-
     (async function () {
       try {
         const userData = await getUserData(user.uid)
-        console.log(userData)
         setUser(userData.username)
       } catch (error) {
         alert(error.message)
       }
     })()
-
   }, [])
 
-
-  const signOut = async () => {
+  const userLogin = async () => {
+    navigate('/login')
+  }
+  const userLogout = async () => {
     await userSignOut()
+    navigate('/')
   }
   return (
     <div className="headerParentDiv">
@@ -55,11 +56,19 @@ function Header() {
           <span> ENGLISH </span>
           <Arrow></Arrow>
         </div>
-        <div className="loginPage">
-          <span>Hi, {userName}</span>
 
-          <hr />
+
+
+        <div className="loginPage">
+          {userName ? (<>
+            <span>Hi, {userName}</span>
+            <br />
+            <button onClick={userLogout}>Logout</button>
+          </>) : (<button onClick={userLogin}>Login</button>)}
         </div>
+
+
+
 
         <div className="sellMenu">
           <SellButton></SellButton>

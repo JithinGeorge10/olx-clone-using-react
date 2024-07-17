@@ -17,9 +17,9 @@ export default function AuthProvider({ children }) {
             }
         });
     }, [])
-
+    console.log({user})
     return (
-        <AuthContext.Provider value={{ user, setUser }}>
+        <AuthContext.Provider value={user}>
             {children}
         </AuthContext.Provider>
     )

@@ -1,7 +1,7 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Logo from '../../olx-logo.png';
 import './Login.css';
-import {  signInToFirebase } from '../../utils/firestore';
+import { signInToFirebase } from '../../utils/firestore';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -10,12 +10,13 @@ function Login() {
     const [password, setPassword] = useState('')
     const handleLogin = async (e) => {
         e.preventDefault()
-        const userCredential = await signInToFirebase(email, password)
-       
-
-        console.log(userCredential)
-        // await loginUser()
-        navigate('/')
+        try {
+            const userCredential = await signInToFirebase(email, password)
+            console.log(userCredential)
+            navigate('/')
+        } catch (error) {
+            alert(error.message)
+        }
     }
     return (
         <div>

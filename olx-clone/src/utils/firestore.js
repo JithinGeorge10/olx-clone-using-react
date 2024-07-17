@@ -38,13 +38,13 @@ export async function signInToFirebase(email, password) {
         throw new Error(error.message)
     }
 }
-export async function userSignOut(email, password) {
+export async function userSignOut() {
     try {
         const auth = getAuth();
         signOut(auth).then(() => {
-            // Sign-out successful.
+           console.log('logged out')
         }).catch((error) => {
-            // An error happened.
+            console.log(error.message);
         });
     } catch (error) {
         throw new Error(error.message)
@@ -65,18 +65,3 @@ export async function getUserData(uid) {
         throw new Error(error.message)
     }
 }
-
-
-// export async function loginUser() {
-//     try {
-//         onAuthStateChanged(auth, (user) => {
-//             if (user) {
-//                 <Outlet />
-//                 const uid = user.uid;
-//             } else {
-//                 <Navigate to='/login' />
-//             }
-//         });
-//     } catch (error) {
-//     }
-// }
