@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword, getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../Firebase/config";
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 
@@ -69,7 +69,7 @@ export async function getUserData(uid) {
 
 
 export async function uploadImages(image, Category, price, user, name) {
-    try {  
+    try {
         // Create a root reference
         const storage = getStorage();
         const storageRef = ref(storage, `images/${image.name}`)
@@ -79,7 +79,7 @@ export async function uploadImages(image, Category, price, user, name) {
         let url = await getDownloadURL(storageRef);
         console.log(url)
         console.log({ user })
-       
+
         await addDoc(collection(db, "products"), {
             user: user.uid,
             name,
@@ -103,9 +103,18 @@ export async function getProducts() {
                 id: product.id,
             };
         });
-        console.log(allProducts)
         return allProducts
     } catch (error) {
         throw new Error(error.message)
     }
 }
+
+// export async function getSellerDetails(userId) {
+//     try {
+//         const citiesRef = collection(db, "Users");
+//         const q = query(citiesRef, where("id", "==", userId));
+//         return q
+//     } catch (error) {
+//         throw new Error(error.message)
+//     }
+// }

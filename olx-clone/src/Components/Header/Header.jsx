@@ -20,7 +20,6 @@ function Header() {
       (async function () {
         try {
           const userData = await getUserData(user.uid);
-          console.log({ userData });
           localStorage.setItem('username', userData.username);
           setUserName(userData.username);
         } catch (error) {

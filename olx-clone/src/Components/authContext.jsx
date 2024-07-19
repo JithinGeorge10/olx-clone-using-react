@@ -5,7 +5,6 @@ export const AuthContext = createContext()
 
 
 export default function AuthProvider({ children }) {
-
     const [user, setUser] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -20,7 +19,6 @@ export default function AuthProvider({ children }) {
                 setIsLoading(false)
             }
         });
-
     }, [])
 
     return (

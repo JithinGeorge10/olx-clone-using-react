@@ -22,7 +22,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={user ? <Navigate to='/' /> : <Login />} />
         <Route path='/create' element={user ? <Create /> : <Navigate to='/login' />} />
-        <Route path='/viewpost' element={<ViewPost />} />
+        <Route path='/viewpost/:id' element={<ViewPost />} />
       </Routes>
     </>
   )
