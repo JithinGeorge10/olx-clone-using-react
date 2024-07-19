@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Heart from '../../assets/Heart';
 import './Posts.css';
+import { getProducts } from '../../utils/firestore';
 
 function Posts() {
+  const [Products, setProducts] = useState([])
+  useEffect(() => {
+    (async function () {
+      const allProducts = await getProducts()
+      setProducts(allProducts)
+    })()
 
+  }, [])
   return (
     <div className="postParentDiv">
       <div className="moreView">
@@ -13,24 +21,28 @@ function Posts() {
           <span>View more</span>
         </div>
         <div className="cards">
-          <div
-            className="card"
-          >
-            <div className="favorite">
-              <Heart></Heart>
+          {Products.map(product => {
+           return <div
+              className="card"
+            >
+              <div className="favorite">
+                <Heart></Heart>
+              </div>
+              <div className="image">
+                <img src={product.url} alt="" />
+              </div>
+              <div className="content">
+           
+                <p className="rate">&#x20B9; {product.price}</p>
+                <span className="kilometer">{product.name}</span>
+                <p className="name"> {product.Category}</p>
+              </div>
+              <div className="date">
+                <span>{product.createdAt}</span>
+              </div>
             </div>
-            <div className="image">
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWcQK9ds-Fv_O-fiz0I1twsSdiDEFYsUWLA&s" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>Tue May 04 2021</span>
-            </div>
-          </div>
+          })
+          }
         </div>
       </div>
       <div className="recommendations">

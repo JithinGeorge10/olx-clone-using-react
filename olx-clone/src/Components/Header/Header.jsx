@@ -8,28 +8,46 @@ import SellButtonPlus from '../../assets/SellButtonPlus';
 import { AuthContext } from '../authContext';
 import { getUserData, userSignOut } from '../../utils/firestore';
 import { useNavigate } from 'react-router-dom';
+
 function Header() {
-  const user = useContext(AuthContext)
-  const [userName, setUser] = useState()
-  const navigate = useNavigate()
+
+  const { user, setUser } = useContext(AuthContext)
+  const [userName, setUserName] = useState()
+  const navigate = useNavigate();
+
   useEffect(() => {
-    (async function () {
-      try {
-        const userData = await getUserData(user.uid)
-        setUser(userData.username)
-      } catch (error) {
-        alert(error.message)
-      }
-    })()
-  }, [])
+    if (user) {
+      (async function () {
+        try {
+          const userData = await getUserData(user.uid);
+          console.log({ userData });
+          localStorage.setItem('username', userData.username);
+          setUserName(userData.username);
+        } catch (error) {
+          console.log(error.message);
+        }
+      })();
+    } else {
+      localStorage.removeItem('username');
+      setUserName(null);
+    }
+  }, []);
 
   const userLogin = async () => {
     navigate('/login')
   }
+
   const userLogout = async () => {
+    setUser(null)
+    setUserName(null)
     await userSignOut()
     navigate('/')
   }
+
+  const sellButton = () => {
+    navigate('/create')
+  }
+
   return (
     <div className="headerParentDiv">
       <div className="headerChildDiv">
@@ -57,25 +75,27 @@ function Header() {
           <Arrow></Arrow>
         </div>
 
-
-
         <div className="loginPage">
           {userName ? (<>
             <span>Hi, {userName}</span>
             <br />
             <button onClick={userLogout}>Logout</button>
-          </>) : (<button onClick={userLogin}>Login</button>)}
+          </>) : (<button className='loginButton' onClick={userLogin}>Login</button>)}
         </div>
 
-
-
-
         <div className="sellMenu">
-          <SellButton></SellButton>
-          <div className="sellMenuContent">
-            <SellButtonPlus></SellButtonPlus>
-            <span>SELL</span>
-          </div>
+          {userName ? (<>
+            <SellButton></SellButton>
+            <div className="sellMenuContent">
+              <SellButtonPlus></SellButtonPlus>
+              <span onClick={sellButton}>SELL</span>
+            </div>
+          </>) : (
+            <>
+              <p></p>
+            </>
+          )}
+
         </div>
       </div>
     </div>

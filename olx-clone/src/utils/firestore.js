@@ -1,9 +1,10 @@
 import { createUserWithEmailAndPassword, getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../Firebase/config";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+
 
 const db = getFirestore(app);
-
 const auth = getAuth()
 
 export async function addNewUser(email, password, username) {
@@ -42,7 +43,7 @@ export async function userSignOut() {
     try {
         const auth = getAuth();
         signOut(auth).then(() => {
-           console.log('logged out')
+            console.log('logged out')
         }).catch((error) => {
             console.log(error.message);
         });
@@ -61,6 +62,49 @@ export async function getUserData(uid) {
         } else {
             throw new Error("No such document!")
         }
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+
+export async function uploadImages(image, Category, price, user, name) {
+    try {  
+        // Create a root reference
+        const storage = getStorage();
+        const storageRef = ref(storage, `images/${image.name}`)
+        await uploadBytes(storageRef, image).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+        });
+        let url = await getDownloadURL(storageRef);
+        console.log(url)
+        console.log({ user })
+       
+        await addDoc(collection(db, "products"), {
+            user: user.uid,
+            name,
+            Category,
+            price,
+            url,
+            createdAt: new Date().toDateString(),
+        });
+        await getProducts()
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+export async function getProducts() {
+    try {
+        let snapshot = await getDocs(collection(db, "products"));
+        let allProducts = snapshot?.docs?.map((product) => {
+            return {
+                ...product.data(),
+                id: product.id,
+            };
+        });
+        console.log(allProducts)
+        return allProducts
     } catch (error) {
         throw new Error(error.message)
     }
