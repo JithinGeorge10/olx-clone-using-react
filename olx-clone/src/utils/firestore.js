@@ -56,7 +56,6 @@ export async function getUserData(uid) {
     try {
         const docRef = doc(db, "Users", uid);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
             return docSnap.data()
         } else {
@@ -109,12 +108,19 @@ export async function getProducts() {
     }
 }
 
-// export async function getSellerDetails(userId) {
-//     try {
-//         const citiesRef = collection(db, "Users");
-//         const q = query(citiesRef, where("id", "==", userId));
-//         return q
-//     } catch (error) {
-//         throw new Error(error.message)
-//     }
-// }
+export async function getSellerDetails(userId) {
+    try {
+        const usersRef  = collection(db, "Users");
+        const q = query(usersRef , where("id", "==", userId));
+        const querySnapshot = await getDocs(q);
+
+        let userDetails = null;
+        querySnapshot.forEach((doc) => {
+            userDetails = doc.data();
+        });
+
+        return userDetails;
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}

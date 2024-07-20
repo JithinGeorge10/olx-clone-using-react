@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './View.css';
-import { getProducts } from '../../utils/firestore';
+import { getProducts, getSellerDetails } from '../../utils/firestore';
 const products = await getProducts()
-// const sellerDetails=await getSellerDetails(products[id].user)
+
+// const sellerDetails= getSellerDetails(products[id].user)
 // console.log(sellerDetails)
 function View() {
   const { id } = useParams();
+  const [name, setName] = useState()
+  const [phone, setPhone] = useState()
+  useEffect(() => {
+    try {
+      (async function () {
+        const userDetails = await getSellerDetails(products[id].user)
+        setName(userDetails.username)
+        setPhone(userDetails.phone)
+      })()
+    } catch (error) {
+
+    }
+
+  }, [])
+
 
   return (
     <div className="viewParentDiv">
@@ -25,8 +41,8 @@ function View() {
         </div>
         <div className="contactDetails">
           <p>Seller details</p>
-          <p>No name</p>
-          <p>1234567890</p>
+          <p>{name}</p>
+          <p>{phone}</p>
         </div>
       </div>
     </div>
