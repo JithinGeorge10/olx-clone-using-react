@@ -15,9 +15,33 @@ function Login() {
             console.log(userCredential)
             navigate('/')
         } catch (error) {
-            alert(error.message)
+            handleAuthError(error.code)
         }
     }
+
+    const handleAuthError = (errorCode) => {
+        switch (errorCode) {
+            case 'auth/invalid-email':
+                alert('Invalid email address.');
+                break;
+            case 'auth/user-disabled':
+                alert('User account is disabled.');
+                break;
+            case 'auth/user-not-found':
+                alert('No user found with this email.');
+                break;
+            case 'auth/wrong-password':
+                alert('Incorrect password.');
+                break;
+            case 'auth/invalid-credential':
+                alert('Check mail and password');
+                break;
+            default:
+                alert('Login failed. Please try again.');
+                break;
+        }
+    };
+
     return (
         <div>
             <div className="loginParentDiv">

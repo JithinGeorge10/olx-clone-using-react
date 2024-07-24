@@ -6,14 +6,18 @@ import { Link } from 'react-router-dom';
 
 function Posts() {
   const [Products, setProducts] = useState([]);
-
+  Products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   useEffect(() => {
     (async function () {
       const allProducts = await getProducts()
+      console.log(allProducts)
       setProducts(allProducts)
     })()
   }, [])   
   
+
+  Products.sort()
+
   return (
     
        
@@ -22,6 +26,42 @@ function Posts() {
           <div className="heading">
             <span>Quick Menu</span>
             <span>View more</span>
+          </div>
+          <div className="cards">
+            {Products.map((product, i) => {
+              return <div
+                className="card"
+              >
+                <Link
+                  key={product.id}
+                  to={`/viewpost/${i}`}
+                  className="card"
+                >
+                  <div className="favorite">
+                    <Heart></Heart>
+                  </div>
+
+                  <div className="image">
+                    <img src={product.url} alt="" />
+                  </div>
+                 
+                  <div className="content">
+                    <p className="rate">&#x20B9; {product.price}</p>
+                    <span className="kilometer">{product.name}</span>
+                    <p className="name"> {product.Category}</p>
+                  </div>
+                  <div className="date">
+                    <span>{product.createdAt}</span>
+                  </div>
+                  </Link>
+              </div>
+            })
+            }
+          </div>
+        </div>
+        <div className="recommendations">
+          <div className="heading">
+            <span>Fresh recommendations</span>
           </div>
           <div className="cards">
             {Products.map((product, i) => {
@@ -53,29 +93,6 @@ function Posts() {
               </div>
             })
             }
-          </div>
-        </div>
-        <div className="recommendations">
-          <div className="heading">
-            <span>Fresh recommendations</span>
-          </div>
-          <div className="cards">
-            <div className="card">
-              <div className="favorite">
-                <Heart></Heart>
-              </div>
-              <div className="image">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyWcQK9ds-Fv_O-fiz0I1twsSdiDEFYsUWLA&s" alt="" />
-              </div>
-              <div className="content">
-                <p className="rate">&#x20B9; 250000</p>
-                <span className="kilometer">Two Wheeler</span>
-                <p className="name"> YAMAHA R15V3</p>
-              </div>
-              <div className="date">
-                <span>10/5/2021</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

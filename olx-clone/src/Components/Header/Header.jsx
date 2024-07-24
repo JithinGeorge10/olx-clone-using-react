@@ -39,6 +39,7 @@ function Header() {
   const userLogout = async () => {
     setUser(null)
     setUserName(null)
+    alert('Are you Sure')
     await userSignOut()
     navigate('/')
   }

@@ -13,11 +13,36 @@ const Create = () => {
     const [category, SetCategory] = useState('')
     const [price, SetPrice] = useState('')
     const [image, SetImage] = useState(null)
+    const [error, setError] = useState('');
 
     const handleSubmit = async () => {
-        console.log('submitClicked');
-        await uploadImages(image, category, price, user,name)
-        navigate('/')
+        setError('');
+        if (!name || !category || !price || !image) {
+            setError('All fields must be filled.');
+            return;
+        }
+        if (!/^[a-zA-Z\s]+$/.test(name)) {
+            setError('Name should not contain numbers.');
+            return;
+        }
+
+        if (!/^[a-zA-Z\s]+$/.test(category)) {
+            setError('Category should not contain numbers.');
+            return;
+        }
+
+        if (price <= 0) {
+            setError('Price should be above 0 rupees.');
+            return;
+        }
+        try {
+            console.log('submitClicked');
+            await uploadImages(image, category, price, user, name);
+            navigate('/');
+        } catch (err) {
+            setError('Error uploading image. Please try again.');
+
+        }
     }
 
     return (
@@ -53,14 +78,21 @@ const Create = () => {
                 <br />
 
                 <br />
-                <img alt="Posts" width="200px" height="200px" src={image ? URL.createObjectURL(image) : ''}></img>
-
+                {image && (
+                    <img
+                        alt="Posts"
+                        width="200px"
+                        height="200px"
+                        src={URL.createObjectURL(image)}
+                    />
+                )}
                 <br />
                 <input onChange={(e) => {
                     SetImage(e.target.files[0])
                 }} type="file" />
                 <br />
-                <button onClick={handleSubmit} className="uploadBtn">upload and Submit</button>
+                {error && <p style={{ color: 'red' }} className="error">{error}</p>}
+                <button onClick={handleSubmit} className="uploadBtn" >upload and Submit</button>
             </div>
 
         </>
